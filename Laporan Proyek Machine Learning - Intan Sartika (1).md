@@ -1,11 +1,13 @@
-# Laporan Proyek Machine Learning - Intan Sartika
+<img width="610" alt="image" src="https://github.com/user-attachments/assets/37507fa9-8d6f-4d32-aa27-f7c4e07f6971" /># Laporan Proyek Machine Learning - Intan Sartika
 
 ## Domain Proyek
 
 *Latar Belakang*
+
 Dalam beberapa dekade terakhir, keberlanjutan (sustainability) menjadi fokus utama di berbagai sektor industri, termasuk manufaktur, energi, dan ritel. Bisnis semakin dituntut untuk menilai dan memitigasi dampak lingkungan mereka. Salah satu aspek penting dari keberlanjutan adalah kemampuan untuk memprediksi dan mengelola emisi karbon, penggunaan energi, dan efisiensi operasional. Machine learning berperan penting dalam mengatasi tantangan ini dengan memberikan analisis prediktif dan rekomendasi berbasis data.
 
 *Mengapa dan Bagaimana Masalah Harus Diselesaikan*
+
 Perusahaan perlu berfokus pada pemantauan dan penurunan dampak lingkungan mereka sebagai bagian dari strategi keberlanjutan. Dengan memprediksi pola penggunaan energi dan emisi karbon, perusahaan dapat membuat keputusan yang lebih tepat dalam mengoptimalkan operasional dan mengurangi biaya lingkungan. Misalnya, memprediksi emisi karbon di fasilitas produksi akan memungkinkan manajer untuk mengidentifikasi dan mengatasi proses-proses yang menghasilkan emisi tinggi secara real-time.
   
   Referensi: 
@@ -14,9 +16,9 @@ Perusahaan perlu berfokus pada pemantauan dan penurunan dampak lingkungan mereka
 
 ## Business Understanding
 ### Problem Statements
-- Bagaimana memprediksi emisi karbon berdasarkan data operasional fasilitas?
 - Faktor-faktor apa saja yang paling berpengaruh terhadap emisi karbon di fasilitas produksi?
-
+- Bagaimana membangun model prediksi edengan MAE <10% dari rata-rata nilai emisi aktual untuk memprediksi emisi karbon di fasilitas produksi?
+ 
 ### Goals
 - Menentukan karakteristik utama yang berkontribusi pada tingkat emisi karbon.
 - Membangun model prediksi dengan MAE <10% dari rata-rata nilai emisi aktual untuk memprediksi emisi karbon di fasilitas produksi.
@@ -45,7 +47,18 @@ Beberapa variabel penting dalam dataset ini adalah:
    c.Maximum Load = Beban Maksimum
 Dalam proyek kali ini, dilakukan juga beberapa tahapan yang diperlukan untuk memahami data, contohnya teknik visualisasi data dan exploratory data analysis.
 
-![image](https://github.com/user-attachments/assets/5a306526-026b-4ae3-8f3d-2045d8e2655d)
+Dalam grafik mengenai persebaran jenis beban listrik, diketahui bahwa Light_Load merupakan status dominan dalam dataset dengan proporsi lebih dari setengahnya (51.6%).
+Hal ini menunjukkan bahwa sebagian besar kondisi operasi industri baja mungkin beroperasi pada beban rendah
+<img width="874" alt="image" src="https://github.com/user-attachments/assets/40b85537-7bb1-4ba7-b688-a48a74894e46" />
+
+Berikut adalah grafik yang menggambarkan distribusi tingkat emisi CO2 dan dapat ditarik insight bahwa tingkat emisi dengan frekuensi tertinggi masih berada di bawah angka 0.01
+<img width="623" alt="image" src="https://github.com/user-attachments/assets/bf570fb2-1a69-4f0a-a7b6-f5de99bc297c" />
+
+Pada grafik yang menunjukkan tingkat penggunaan energi rata-rata antara hari kerja dan akhir pekan, diketahui bahwa sebagian besar nilai CO2 berada di dekat rentang 0 hingga 0.01 ppm. Hal ini menunjukkan bahwa kebanyakan kondisi dalam dataset menghasilkan emisi CO2 yang sangat rendah.
+<img width="604" alt="image" src="https://github.com/user-attachments/assets/84c8dd28-16d8-402c-b825-4826258143bb" />
+
+Selain itu, visualisasi data berupa grafik konsumsi energi berdasarkan jenis bebannya menunjukkan rata-rata penggunaan energi pada hari kerja (sekitar 35 kWh) jauh lebih tinggi dibandingkan pada akhir pekan (sekitar 15 kWh). Hal ini mungkin disebabkan oleh intensitas operasional yang lebih tinggi di hari kerja karena kegiatan produksi aktif.
+<img width="610" alt="image" src="https://github.com/user-attachments/assets/141b30e8-1d80-45da-b254-c3403f5470ab" />
 
 
 ## Data Preparation
@@ -107,10 +120,7 @@ Kekurangan:
 Pada tahap evaluasi, dilakukan pengujian terhadap beberapa model machine learning yang telah dikembangkan untuk memprediksi target variabel. Kinerja model diukur menggunakan dua metrik utama, yaitu Mean Squared Error (MSE) dan Mean Absolute Error (MAE), yang memberikan gambaran mengenai seberapa baik model memprediksi data dibandingkan dengan nilai aktual.
 
 - Mean Squared Error (MSE): Mengukur rata-rata kuadrat kesalahan prediksi, memberikan bobot lebih besar pada kesalahan yang besar. Semakin rendah nilai MSE, semakin baik performa model.
-![image](https://github.com/user-attachments/assets/3a5eb200-c56f-4e6f-9c8a-ba44b964b399)
-
 - Mean Absolute Error (MAE): Mengukur rata-rata kesalahan absolut prediksi. Berbeda dengan MSE, MAE memberikan bobot yang sama untuk semua kesalahan, tanpa membesar-besarkan dampak kesalahan yang besar.
-![image](https://github.com/user-attachments/assets/81e169c1-5ec6-474e-a1cb-8eb0e0360180)
 
 Hasil evaluasi kinerja model adalah sebagai berikut:
 
@@ -132,22 +142,22 @@ Gradient Boosting menunjukkan performa terburuk dengan nilai MSE sebesar 8.36364
 
 **Evaluasi Terhadap Business Understanding**
 1. Menjawab Problem Statement
-a. Memprediksi Emisi Karbon:
-Model yang dibangun berhasil menjawab problem statement dengan memprediksi emisi karbon berdasarkan data operasional   fasilitas. Hasil prediksi menunjukkan tingkat akurasi yang sesuai dengan tujuan proyek.
-b. Identifikasi Faktor Utama:
+a. Identifikasi Faktor Utama:
 Model Random Forest Regressor mampu mengidentifikasi fitur-fitur yang paling berpengaruh terhadap emisi karbon, seperti konsumsi energi, intensitas produksi, dan jenis bahan bakar yang digunakan.
+b. Memprediksi Emisi Karbon:
+Model yang dibangun berhasil menjawab problem statement dengan memprediksi emisi karbon berdasarkan data operasional   fasilitas. Hasil prediksi menunjukkan tingkat akurasi yang sesuai dengan tujuan proyek.
 
-2. Mencapai Goals
+3. Mencapai Goals
 a. Penentuan Karakteristik Utama:
-Dengan memanfaatkan analisis feature importance dari Random Forest, karakteristik utama seperti konsumsi energi dan jenis bahan bakar dapat diidentifikasi sebagai faktor dominan dalam emisi karbon.
+Dengan memanfaatkan analisis feature importance dari Random Forest, karakteristik utama seperti konsumsi energi dan jenis beban dapat diidentifikasi sebagai faktor dominan dalam emisi karbon.
 b. Akurasi Model:
 Ketiga model yang digunakan mencapai MAE kurang dari 10%, memenuhi target yang telah ditentukan.
 
-3. Dampak dari Solution Statement
+4. Dampak dari Solution Statement
 a. Pemilihan Model yang Optimal:
 Penggunaan berbagai algoritma (Random Forest, Decision Tree, dan Gradient Boosting) serta optimasi hyperparameter memberikan dampak positif pada kualitas model. Gradient Boosting Regressor, sebagai model terbaik, menghasilkan prediksi yang akurat dengan kemampuan generalisasi yang baik.
 b. Signifikansi Solusi:
 Solusi yang direncanakan memberikan hasil yang signifikan dalam membantu fasilitas produksi memahami dan mengelola faktor-faktor yang memengaruhi emisi karbon. Hal ini membuka peluang untuk implementasi kebijakan efisiensi energi yang lebih efektif, yang mendukung keberlanjutan dan pengurangan jejak karbon.
 -------------------
-## Kesimpulan Evaluasi ##
+## Kesimpulan Evaluasi
 Berdasarkan hasil evaluasi, Random Forest Regressordipilih sebagai model terbaik karena memiliki performa paling baik berdasarkan MSE dan MAE. Model ini memberikan hasil prediksi yang lebih akurat dan konsisten dibandingkan model lainnya, sehingga dapat digunakan untuk menyelesaikan permasalahan dalam proyek ini.
