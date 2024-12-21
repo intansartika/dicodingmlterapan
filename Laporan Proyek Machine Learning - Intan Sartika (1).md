@@ -1,4 +1,4 @@
-<img width="610" alt="image" src="https://github.com/user-attachments/assets/37507fa9-8d6f-4d32-aa27-f7c4e07f6971" /># Laporan Proyek Machine Learning - Intan Sartika
+# Laporan Proyek Machine Learning - Intan Sartika
 
 ## Domain Proyek
 
@@ -45,6 +45,12 @@ Beberapa variabel penting dalam dataset ini adalah:
    a.Light Load = Beban Ringan
    b.Medium Load = Beban Sedang
    c.Maximum Load = Beban Maksimum
+
+### Kondisi Data
+Dataset tidak memiliki missing value sehingga tidak diperlukan penanganan missing value.
+Dataset memiliki 81 data duplicate tetapi tidak dilakukan penanganan karena diambil dalam timeframe yang berbeda, jadi terdapat alasan duplicate karena kinerja mesin yang sama.
+
+### Exploratory Data Analysis
 Dalam proyek kali ini, dilakukan juga beberapa tahapan yang diperlukan untuk memahami data, contohnya teknik visualisasi data dan exploratory data analysis.
 
 Dalam grafik mengenai persebaran jenis beban listrik, diketahui bahwa Light_Load merupakan status dominan dalam dataset dengan proporsi lebih dari setengahnya (51.6%).
@@ -55,6 +61,7 @@ Berikut adalah grafik yang menggambarkan distribusi tingkat emisi CO2 dan dapat 
 <img width="623" alt="image" src="https://github.com/user-attachments/assets/bf570fb2-1a69-4f0a-a7b6-f5de99bc297c" />
 
 Pada grafik yang menunjukkan tingkat penggunaan energi rata-rata antara hari kerja dan akhir pekan, diketahui bahwa sebagian besar nilai CO2 berada di dekat rentang 0 hingga 0.01 ppm. Hal ini menunjukkan bahwa kebanyakan kondisi dalam dataset menghasilkan emisi CO2 yang sangat rendah.
+
 <img width="604" alt="image" src="https://github.com/user-attachments/assets/84c8dd28-16d8-402c-b825-4826258143bb" />
 
 Selain itu, visualisasi data berupa grafik konsumsi energi berdasarkan jenis bebannya menunjukkan rata-rata penggunaan energi pada hari kerja (sekitar 35 kWh) jauh lebih tinggi dibandingkan pada akhir pekan (sekitar 15 kWh). Hal ini mungkin disebabkan oleh intensitas operasional yang lebih tinggi di hari kerja karena kegiatan produksi aktif.
@@ -62,7 +69,7 @@ Selain itu, visualisasi data berupa grafik konsumsi energi berdasarkan jenis beb
 
 
 ## Data Preparation
-Pada bagian ini Anda menerapkan dan menyebutkan teknik data preparation yang dilakukan. Teknik yang digunakan pada notebook dan laporan harus berurutan.
+Pada bagian ini disebutkan teknik data preparation yang dilakukan. Teknik yang digunakan pada notebook dan laporan disebutkan berurutan.
 
 - Drop Feature yang tidak menghasilkan : Melakukan drop feature Date karena tidak memberikan informasi signifikan pada model untuk melakukan prediksi
 - Pengkodean Variabel Kategorikal: Jika terdapat variabel kategorikal, seperti jenis produk yang dihasilkan, variabel tersebut akan di-encode ke dalam bentuk numerik menggunakan teknik one-hot encoding.
@@ -131,33 +138,44 @@ Hasil evaluasi kinerja model adalah sebagai berikut:
 |Gradient Boosting	Regressor |0.000001|	0.000127|
 
 **Analisis Hasil**
+
 *Random Forest Regressor*
+
 Model ini memiliki kinerja terbaik berdasarkan kedua metrik evaluasi. Nilai MSE sebesar 1.112423 menunjukkan bahwa kesalahan kuadrat rata-rata model cukup kecil, sementara nilai MAE sebesar 0.334165 mengindikasikan bahwa rata-rata kesalahan absolut prediksi juga sangat rendah. Model ini menunjukkan kemampuan yang baik dalam menangani masalah dengan kompleksitas rendah atau data linier.
 
 *Decision Tree Regressor* 
+
 Meskipun nilai MSE dan MAE untuk Decision Tree lebih tinggi dibandingkan Logistic Regression, model ini tetap memberikan hasil yang cukup baik. Model ini cocok untuk menangani data yang memiliki relasi non-linier, meskipun berpotensi overfitting jika tidak dilakukan tuning lebih lanjut.
 
 *Gradient Boosting*
+
 Gradient Boosting menunjukkan performa terburuk dengan nilai MSE sebesar 8.363640 dan MAE sebesar 1.772848. Hal ini kemungkinan disebabkan oleh hyperparameter model yang belum dioptimalkan atau model yang terlalu kompleks untuk dataset ini.
 
 **Evaluasi Terhadap Business Understanding**
 1. Menjawab Problem Statement
+
 a. Identifikasi Faktor Utama:
 Model Random Forest Regressor mampu mengidentifikasi fitur-fitur yang paling berpengaruh terhadap emisi karbon, seperti konsumsi energi, intensitas produksi, dan jenis bahan bakar yang digunakan.
+
 b. Memprediksi Emisi Karbon:
 Model yang dibangun berhasil menjawab problem statement dengan memprediksi emisi karbon berdasarkan data operasional   fasilitas. Hasil prediksi menunjukkan tingkat akurasi yang sesuai dengan tujuan proyek.
 
 3. Mencapai Goals
+
 a. Penentuan Karakteristik Utama:
 Dengan memanfaatkan analisis feature importance dari Random Forest, karakteristik utama seperti konsumsi energi dan jenis beban dapat diidentifikasi sebagai faktor dominan dalam emisi karbon.
+
 b. Akurasi Model:
 Ketiga model yang digunakan mencapai MAE kurang dari 10%, memenuhi target yang telah ditentukan.
 
 4. Dampak dari Solution Statement
+
 a. Pemilihan Model yang Optimal:
 Penggunaan berbagai algoritma (Random Forest, Decision Tree, dan Gradient Boosting) serta optimasi hyperparameter memberikan dampak positif pada kualitas model. Gradient Boosting Regressor, sebagai model terbaik, menghasilkan prediksi yang akurat dengan kemampuan generalisasi yang baik.
+
 b. Signifikansi Solusi:
 Solusi yang direncanakan memberikan hasil yang signifikan dalam membantu fasilitas produksi memahami dan mengelola faktor-faktor yang memengaruhi emisi karbon. Hal ini membuka peluang untuk implementasi kebijakan efisiensi energi yang lebih efektif, yang mendukung keberlanjutan dan pengurangan jejak karbon.
+
 -------------------
 ## Kesimpulan Evaluasi
-Berdasarkan hasil evaluasi, Random Forest Regressordipilih sebagai model terbaik karena memiliki performa paling baik berdasarkan MSE dan MAE. Model ini memberikan hasil prediksi yang lebih akurat dan konsisten dibandingkan model lainnya, sehingga dapat digunakan untuk menyelesaikan permasalahan dalam proyek ini.
+Berdasarkan hasil evaluasi, Random Forest Regressor dipilih sebagai model terbaik karena memiliki performa paling baik berdasarkan MSE dan MAE. Model ini memberikan hasil prediksi yang lebih akurat dan konsisten dibandingkan model lainnya, sehingga dapat digunakan untuk menyelesaikan permasalahan dalam proyek ini.
