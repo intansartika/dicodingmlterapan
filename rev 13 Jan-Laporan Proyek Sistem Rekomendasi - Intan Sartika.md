@@ -159,7 +159,9 @@ Pada tahap **Data Preparation**, berbagai teknik dilakukan untuk mempersiapkan d
 
 ### 1. Menghapus Missing Value dan Data Tidak Relevan
 Pada tahap pertama, data yang mengandung missing value dihapus menggunakan metode drop, karena jumlah missing value yang ditemukan dianggap tidak signifikan dan tidak relevan untuk diperbaiki. Data yang telah dibersihkan disimpan dalam variabel baru bernama all_books_clean. Setelah proses penghapusan missing value ini, dataset menyisakan sebanyak 1.031.132 baris data. Selain itu, dilakukan penghapusan data tidak relevan, seperti gambar buku dalam berbagai ukuran (S, M, dan L), yang tidak diperlukan untuk rekomendasi. Penghapusan ini bertujuan untuk mengurangi noise pada data sehingga hasil rekomendasi menjadi lebih akurat.
+
 ![image](https://github.com/user-attachments/assets/35a69d9d-63ed-4f69-8efe-32d62deec3d0)
+
 **Gambar 9. Tahapan Penghapusan Missing Value**
 
 ---
@@ -198,6 +200,12 @@ Selain data pengguna, data buku juga diproses untuk mendapatkan informasi tentan
 #### 3. Pengolahan Rating (Rating Processing)
 Rating buku dalam dataset perlu diproses agar dapat digunakan oleh model. Kode `ratings_with_name['Book-Rating'] = pd.to_numeric(ratings_with_name['Book-Rating'], errors='coerce')` digunakan untuk memastikan bahwa nilai rating dalam dataset dikonversi menjadi angka yang valid, mengatasi nilai yang mungkin tidak terformat dengan benar atau kosong. Kemudian, kita mengonversi rating menjadi tipe data `float32` dengan kode `df_rating['Book-Rating'] = df_rating['Book-Rating'].values.astype(np.float32)` untuk memastikan efisiensi dalam pemrosesan dan perhitungan lebih lanjut.
 
+Pada tahap persiapan data, dilakukan pengacakan dataset menggunakan fungsi sample() dengan parameter frac=1 untuk memastikan seluruh data diacak, dan random_state=37 untuk menjaga konsistensi hasil pengacakan. Hal ini bertujuan untuk menghindari bias akibat urutan asli data, sehingga model dapat belajar dari distribusi data yang lebih representatif.
+
+Kemudian, subset data diambil dengan menggunakan baris pertama sebanyak 20.000 data dari dataset asli. Langkah ini dilakukan dengan menyeleksi data menggunakan indeks, yaitu ratings[:20000], untuk mempercepat proses pelatihan dan pengujian model tanpa mengurangi representativitas data secara signifikan.
+
+Lalu pada tahap awal pengolahan data, sebuah DataFrame baru bernama df_new dibuat untuk menyimpan subset dari atribut yang relevan, yaitu isbn, book_title, book_author, year_of_publication, dan publisher. Data ini diorganisasi ulang untuk mempermudah analisis dan pemrosesan lebih lanjut. Selanjutnya, hanya 15.000 baris pertama dari DataFrame ini yang diambil menggunakan operasi slicing (df_new[:15000]) untuk mengurangi ukuran data dan mempercepat proses pemodelan sambil tetap menjaga representasi informasi yang penting.
+
 #### 4. Normalisasi Rating
 Agar model dapat bekerja dengan optimal, nilai rating perlu dinormalisasi ke dalam rentang yang seragam. Proses normalisasi dilakukan dengan rumus `(x - min_rating) / (max_rating - min_rating)`, yang memastikan bahwa semua rating berada dalam rentang 0 hingga 1. Ini sangat penting karena sistem rekomendasi membutuhkan skala rating yang konsisten untuk memprediksi dan memberikan rekomendasi yang akurat berdasarkan interaksi pengguna.
 
@@ -212,20 +220,22 @@ Dalam pengembangan model ini, dilakukan pencarian representasi fitur penting dar
 
 Pada proyek ini, digunakan fungsi `tfidfvectorizer()` dari library Scikit-Learn. Langkah pertama adalah mengimpor fungsi `tfidfvectorizer()` untuk menghitung IDF pada data `book_author`. Kemudian, dilakukan pemetaan array dari indeks fitur integer ke nama fitur menggunakan fungsi `get_feature_name_out()`. Setelah itu, dilakukan proses fitting dan transformasi data ke dalam bentuk matriks berukuran (15000, 7216), di mana 15.000 adalah jumlah data dan 7216 adalah jumlah penulis buku yang berbeda. Untuk menghasilkan vektor TF-IDF dalam bentuk matriks, digunakan fungsi `todense()`.
 
-Selanjutnya, untuk menghitung derajat kesamaan (similarity degree) antar judul buku, digunakan teknik cosine similarity. Metode ini berfungsi untuk mengukur kesamaan antara dua vektor dalam ruang berdimensi tinggi dengan menghitung sudut kosinus antara kedua vektor tersebut; semakin kecil sudutnya, semakin besar kesamaan di antara vektor-vektor tersebut. Pada proyek ini, fungsi `cosine_similarity` dari library Scikit-Learn digunakan untuk menghitung nilai kesamaan berdasarkan matriks TF-IDF yang telah dibuat. Dengan menggunakan fungsi `cosine_similarity()`, diperoleh nilai kesamaan antar judul buku dalam bentuk matriks kesamaan yang berupa array. Selanjutnya, dibuat dataframe dari hasil perhitungan cosine similarity, dengan baris dan kolom yang mewakili nama judul buku. Tampilan dataframe hasil perhitungan cosine similarity ini ditunjukkan pada Gambar 9.
+Selanjutnya, untuk menghitung derajat kesamaan (similarity degree) antar judul buku, digunakan teknik cosine similarity. Metode ini berfungsi untuk mengukur kesamaan antara dua vektor dalam ruang berdimensi tinggi dengan menghitung sudut kosinus antara kedua vektor tersebut; semakin kecil sudutnya, semakin besar kesamaan di antara vektor-vektor tersebut. Pada proyek ini, fungsi `cosine_similarity` dari library Scikit-Learn digunakan untuk menghitung nilai kesamaan berdasarkan matriks TF-IDF yang telah dibuat. Dengan menggunakan fungsi `cosine_similarity()`, diperoleh nilai kesamaan antar judul buku dalam bentuk matriks kesamaan yang berupa array. Selanjutnya, dibuat dataframe dari hasil perhitungan cosine similarity, dengan baris dan kolom yang mewakili nama judul buku. Tampilan dataframe hasil perhitungan cosine similarity ini ditunjukkan pada Gambar 10 berikut.
 
-![image](https://github.com/user-attachments/assets/20bf5172-1839-4034-98e5-0c19d7039e7b)
+<img width="255" alt="image" src="https://github.com/user-attachments/assets/5fd49456-2bb6-40b5-ac70-0e86c744772e" />
 
+**Gambar 10. Hasil Perhitungan Cosine Similarity**
 
-Langkah terakhir adalah menampilkan matriks TF-IDF untuk beberapa judul buku dan nama penulis buku dalam bentuk dataframe. Pada dataframe ini, kolom-kolom diisi dengan nama penulis buku, sementara baris-barisnya diisi dengan judul buku, seperti yang ditunjukkan pada **Gambar 10**.
+Langkah terakhir adalah menampilkan matriks TF-IDF untuk beberapa judul buku dan nama penulis buku dalam bentuk dataframe. Pada dataframe ini, kolom-kolom diisi dengan nama penulis buku, sementara baris-barisnya diisi dengan judul buku, seperti yang ditunjukkan pada **Gambar 11**.
 
 ![image](https://github.com/user-attachments/assets/09e6c333-893b-4441-93ac-76f7f2385b06)
-Gambar 10. Dataframe dari matriks tf-idf
+**Gambar 11. Dataframe dari matriks tf-idf**
 
-Hasil dari model ini dengan mencoba mencari 10 rekomendasi untuk buku berjudul **365 Ways to Cook Chinese** dapat dilihat pada **Gambar 11**
+Hasil dari model ini dengan mencoba mencari 10 rekomendasi untuk buku berjudul **365 Ways to Cook Chinese** dapat dilihat pada **Gambar 12**
 
 ![image](https://github.com/user-attachments/assets/28608de8-9c0a-4625-be56-2b1a85c61b18)
-Gambar 11. Hasil Rekomendasi dengan Content-Based Filtering Berdasarkan Nama Penulis
+
+Gambar 12. Hasil Rekomendasi dengan Content-Based Filtering Berdasarkan Nama Penulis
 
 Rekomendasi ini menunjukkan bahwa sistem berhasil mengidentifikasi dan menyarankan buku-buku dari penulis yang relevan dengan kategori "Rosa Ross". Namun, perlu diperhatikan bahwa dalam data yang tersedia, tidak terdapat buku yang ditulis oleh Rosa Ross. Sebagai gantinya, terdapat beberapa buku yang ditulis oleh penulis dengan nama belakang "Ross", seperti Ross Thomas, Ann B. Ross, Jim Ross, Dave Ross, Sheila Ross, Ross W. Greene, dan Sheldon Ross.
 
@@ -236,23 +246,22 @@ Model RecommenderNet adalah sebuah sistem rekomendasi berbasis collaborative fil
 
 Model ini menggunakan empat lapisan embedding utama: user_embedding untuk merepresentasikan pengguna, user_bias untuk bias pengguna, book_title_embedding untuk representasi buku, dan book_title_bias untuk bias buku. Vektor-vektor ini kemudian digunakan untuk menghitung interaksi antara pengguna dan buku melalui perkalian dot product (dot_user_book_title), yang mewakili kecocokan antara pengguna dan buku tertentu. Hasil dari interaksi ini kemudian dijumlahkan dengan bias pengguna dan bias buku untuk menghasilkan prediksi. Akhirnya, output dari model diproses melalui fungsi aktivasi sigmoid untuk menghasilkan nilai antara 0 dan 1, yang menunjukkan tingkat preferensi pengguna terhadap buku tersebut.
 
-Model **RecommenderNet** digunakan untuk training data dan setelah dilakukan pengujian acak untuk salah satu pengguna didapatkan hasil rekomendasi pada **Gambar 12** berikut.
+Model **RecommenderNet** digunakan untuk training data dan setelah dilakukan pengujian acak untuk salah satu pengguna didapatkan hasil rekomendasi pada **Gambar 13** berikut.
 ![image](https://github.com/user-attachments/assets/6db6f39e-bba5-4fc1-895c-eef290947c49)
-Gambar 12. Hasil Rekomendasi Collaborative Filtering
+
+Gambar 13. Hasil Rekomendasi Collaborative Filtering
 
 ## Evaluasi
 ### Content-Based Filtering
 Kinerja model dievaluasi menggunakan metrik Precision, Recall, dan F1-Score. Precision mengukur relevansi rekomendasi yang dihasilkan, Recall mengevaluasi sejauh mana item relevan berhasil diidentifikasi, dan F1-Score memberikan keseimbangan antara precision dan recall. Untuk evaluasi, label ground truth dibuat berdasarkan cosine similarity (1 untuk item yang mirip, dan 0 untuk item yang tidak mirip), dengan ambang batas (threshold) tertentu untuk menentukan kemiripan. Pada implementasi kode, ambang batas diatur sebesar 0,5, namun nilai ini dapat disesuaikan tergantung pada hasil rekomendasi. Matriks ground truth dibuat menggunakan fungsi np.where() dari NumPy, dengan nilai 1 diberikan jika cosine similarity memenuhi atau melampaui ambang batas, dan 0 jika sebaliknya. Matriks ini kemudian disajikan dalam bentuk dataframe yang diindeks berdasarkan judul buku.
 
-Setelah matriks ground truth dibuat, evaluasi model dilakukan menggunakan metrik precision, recall, dan F1-Score. Fungsi precision_recall_fscore_support dari Sklearn digunakan untuk menghitung metrik tersebut. Untuk mempercepat proses evaluasi, hanya 10.000 sampel yang digunakan, dan matriks data diratakan menjadi array satu dimensi. Nilai cosine similarity dikategorikan sebagai 1 atau 0 berdasarkan ambang batas yang ditentukan, dan hasilnya disimpan dalam array prediksi. Precision, recall, dan F1-Score dihitung sebagai klasifikasi biner dengan penanganan pembagian nol. Berikut rumus confusion matrix yang digunakan untuk mengevaluasi model
+Setelah matriks ground truth dibuat, evaluasi model dilakukan menggunakan metrik precision, recall, dan F1-Score. Fungsi precision_recall_fscore_support dari Sklearn digunakan untuk menghitung metrik tersebut. Untuk mempercepat proses evaluasi, hanya 10.000 sampel yang digunakan, dan matriks data diratakan menjadi array satu dimensi. Nilai cosine similarity dikategorikan sebagai 1 atau 0 berdasarkan ambang batas yang ditentukan, dan hasilnya disimpan dalam array prediksi. Precision, recall, dan F1-Score dihitung sebagai klasifikasi biner dengan penanganan pembagian nol. 
 
-![image](https://github.com/user-attachments/assets/ff75ac33-5eb7-4f3a-92a7-3d070aff5d52)
-
-
-Hasil evaluasi pada **Gambar 13** menunjukkan bahwa model bekerja dengan sangat baik, dengan Precision sebesar 1,0 (tidak ada false positive), Recall sebesar 1,0 (berhasil mengidentifikasi hampir semua item yang relevan), dan F1-Score mendekati 1,0, yang mencerminkan keseimbangan yang kuat antara precision dan recall. Hasil ini membuktikan bahwa model sangat efektif dalam memberikan rekomendasi menggunakan pendekatan content-based filtering.
+Hasil evaluasi pada **Gambar 14** menunjukkan bahwa model bekerja dengan sangat baik, dengan Precision sebesar 1,0 (tidak ada false positive), Recall sebesar 1,0 (berhasil mengidentifikasi hampir semua item yang relevan), dan F1-Score mendekati 1,0, yang mencerminkan keseimbangan yang kuat antara precision dan recall. Hasil ini membuktikan bahwa model sangat efektif dalam memberikan rekomendasi menggunakan pendekatan content-based filtering.
 
 ![image](https://github.com/user-attachments/assets/90c7fdfa-1072-41be-a0ca-91d6fb347049)
-Gambar 13. Confusion Matrix
+
+Gambar 14. Confusion Matrix
 
 **Interpretasi Hasil Evaluasi:**
 
@@ -263,9 +272,8 @@ Gambar 13. Confusion Matrix
 ### Collaborative Filtering
 Untuk mengukur kesuksesan model collaborative filtering, digunakan skor Root Mean Square Error (RMSE). Visualisasi evaluasi Root Mean Square Error (RMSE) pada **Gambar 14** menunjukkan bahwa model mencapai konvergensi setelah sekitar 50 epoch, dengan nilai MSE yang rendah. Error akhir yang dicapai adalah 0,2924, sedangkan error validasi adalah 0,3389. Hasil ini menunjukkan performa model yang baik, karena nilai RMSE yang lebih rendah menunjukkan prediksi preferensi pengguna yang lebih akurat, sehingga sistem rekomendasi menjadi lebih efektif.
 
-![image](https://github.com/user-attachments/assets/2901170b-f224-42d7-8aea-a4c823e46ebc)
-
 ![image](https://github.com/user-attachments/assets/08105813-e25e-4f86-a0e3-dc116ead4714)
+
 Gambar 14. Kinerja Model Berbasis Collaborative Filtering
 
 ### Dampak Sistem Rekomendasi Buku Menggunakan Content-Based Recommendation dan Collaborative Filtering terhadap Business Understanding
