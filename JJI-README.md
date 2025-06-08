@@ -52,7 +52,7 @@ Cakupan proyek ini mencakup seluruh tahapan data science sebagai berikut:
 Kita akan melakukan eksplorasi awal data:
 * Ukuran data, deskripsi tiap atribut dan tipe data
 
-Diketahui bahwa terdapat 35 kolom dan 1470 baris dengan detail sebagai berikut
+Diketahui bahwa terdapat 37 kolom dan 4424 baris dengan detail sebagai berikut
 
 | Nama Atribut                     | Deskripsi                                                                                                              | Tipe Data   |
 |----------------------------------|------------------------------------------------------------------------------------------------------------------------|-------------|
@@ -61,7 +61,7 @@ Diketahui bahwa terdapat 35 kolom dan 1470 baris dengan detail sebagai berikut
 | Urutan Aplikasi                  | Urutan pilihan program studi oleh mahasiswa (0 - pilihan utama sampai 9 - pilihan terakhir)                          | Numerik     |
 | Program Studi                    | Program studi yang diambil oleh mahasiswa (mis. 171 - Desain Animasi dan Multimedia, 9991 - Manajemen malam)          | Kategorikal |
 | Waktu Kehadiran                  | Waktu kehadiran kuliah (1 – pagi, 0 – malam)                                                                          | Kategorikal |
-| Kualifikasi Sebelumnya          | Jenis kualifikasi pendidikan sebelum masuk perguruan tinggi                                                           | Kategorikal |
+| Kualifikasi Sebelumnya           | Jenis kualifikasi pendidikan sebelum masuk perguruan tinggi                                                           | Kategorikal |
 | Nilai Kualifikasi Sebelumnya    | Nilai kualifikasi sebelumnya (0–200)                                                                                  | Numerik     |
 | Kewarganegaraan                  | Kewarganegaraan mahasiswa (mis. 1 - Portugal, 41 - Brasil)                                                             | Kategorikal |
 | Kualifikasi Ibu                  | Tingkat pendidikan terakhir ibu mahasiswa                                                                             | Kategorikal |
@@ -82,10 +82,9 @@ Diketahui bahwa terdapat 35 kolom dan 1470 baris dengan detail sebagai berikut
 | SKS 1 Semester (dinilai)         | Jumlah SKS semester 1 yang dinilai                                                                                    | Numerik     |
 | SKS 1 Semester (lulus)           | Jumlah SKS semester 1 yang disetujui/lulus                                                                            | Numerik     |
 
-
-* Distribusi attrition
+* Distribusi tingkat drop out
 Terdapat 879 data berlabel "No" (bertahan di perusahaan) dan 179 berlabel "Yes" (keluar dari perusahaan)
-<img width="448" alt="image" src="https://github.com/user-attachments/assets/89311039-4446-494e-adfe-9912c0ef6349" />
+
 
 * Korelasi potensial dengan variabel lain
 
