@@ -23,9 +23,8 @@ Cakupan proyek ini mencakup seluruh tahapan data science sebagai berikut:
 
 * Persiapan
   * Sumber Data: Data yang digunakan dalam proyek ini diperoleh dari repositori publik di GitHub dengan detail sebagai berikut:
-    1. Link Data: [Dataset Students' Performance](https://github.com/dicodingacademy/dicoding_dataset/tree/main/employee)
-    2. Isi Data: Informasi mengenai atribut-atribut karyawan seperti usia, jenis kelamin, pendidikan, tingkat kepuasan kerja, gaji, jabatan, durasi kerja, dan status kerja (attrition).
-
+    1. Link Data: [Dataset Students' Performance](https://github.com/dicodingacademy/dicoding_dataset/blob/main/students_performance/data.csv)
+    2. Isi Data: Informasi mengenai atribut-atribut siswa saat tahap pendaftaran (seperti usia, jenis kelamin, dan faktor sosial-ekonomi) dan kinerja akademik mahasiswa pada akhir semester pertama dan kedua. 
   * Setup Environment: Untuk melaksanakan proyek ini, diperlukan setup environment dengan spesifikasi sebagai berikut:
 
     1. Bahasa Pemrograman dan Tools:
@@ -55,43 +54,34 @@ Kita akan melakukan eksplorasi awal data:
 
 Diketahui bahwa terdapat 35 kolom dan 1470 baris dengan detail sebagai berikut
 
-| Nama Atribut               | Deskripsi                                      | Tipe Data   |
-|---------------------------|----------------------------------------------------------------------|-------------|
-| EmployeeId                | ID Karyawan                                                         | integer       |
-| Attrition                 | Apakah karyawan keluar? (0 = tidak, 1 = ya)                         | float     |
-| Age                       | Usia karyawan                                                       | integer       |
-| BusinessTravel            | Frekuensi perjalanan dinas                                          | object      |
-| DailyRate                 | Gaji harian                                                         | integer       |
-| Department                | Departemen tempat karyawan bekerja                                  | object      |
-| DistanceFromHome          | Jarak rumah ke kantor (dalam km)                                    | integer       |
-| Education                 | Tingkat pendidikan (1 = Di bawah kuliah, ..., 5 = Doktor)           | integer       |
-| EducationField            | Bidang pendidikan                                                   | object      |
-| EmployeeCount             | Jumlah karyawan (konstan)                                           | integer       |
-| EnvironmentSatisfaction   | Kepuasan terhadap lingkungan kerja (1 = Rendah, ..., 4 = Sangat tinggi)| integer    |
-| Gender                    | Jenis kelamin                                                       | object      |
-| HourlyRate                | Gaji per jam                                                        | integer       |
-| JobInvolvement            | Keterlibatan kerja (1 = Rendah, ..., 4 = Sangat tinggi)             | integer       |
-| JobLevel                  | Tingkat jabatan (1 sampai 5)                                        | integer       |
-| JobRole                   | Jabatan pekerjaan                                                   | object      |
-| JobSatisfaction           | Kepuasan kerja (1 = Rendah, ..., 4 = Sangat tinggi)                 | integer       |
-| MaritalStatus             | Status pernikahan                                                   | object      |
-| MonthlyIncome             | Gaji bulanan                                                        | integer       |
-| MonthlyRate               | Tarif bulanan                                                       | integer       |
-| NumCompaniesWorked        | Jumlah perusahaan tempat pernah bekerja                             | integer       |
-| Over18                    | Apakah usia di atas 18 tahun?                                       | object      |
-| OverTime                  | Apakah lembur?                                                      | object      |
-| PercentSalaryHike         | Persentase kenaikan gaji tahun lalu                                 | integer       |
-| PerformanceRating         | Penilaian kinerja (1 = Rendah, ..., 4 = Luar biasa)                 | integer       |
-| RelationshipSatisfaction  | Kepuasan hubungan kerja (1 = Rendah, ..., 4 = Sangat tinggi)        | integer       |
-| StandardHours             | Jam kerja standar                                                   | integer       |
-| StockOptionLevel          | Level opsi saham                                                    | integer       |
-| TotalWorkingYears         | Total tahun pengalaman kerja                                        | integer       |
-| TrainingTimesLastYear     | Jumlah pelatihan tahun lalu                                         | integer       |
-| WorkLifeBalance           | Keseimbangan kerja-hidup (1 = Rendah, ..., 4 = Sangat baik)         | integer       |
-| YearsAtCompany            | Lama bekerja di perusahaan                                          | integer       |
-| YearsInCurrentRole        | Lama menjabat posisi saat ini                                       | integer       |
-| YearsSinceLastPromotion   | Lama sejak promosi terakhir                                         | integer       |
-| YearsWithCurrManager      | Lama bekerja dengan manajer saat ini                                | integer       |
+| Nama Atribut                     | Deskripsi                                                                                                              | Tipe Data   |
+|----------------------------------|------------------------------------------------------------------------------------------------------------------------|-------------|
+| Status Pernikahan                | Status pernikahan mahasiswa (1 – lajang, 2 – menikah, 3 – duda/janda, 4 – cerai, 5 – hubungan tidak resmi, 6 – pisah hukum) | Kategorikal |
+| Mode Aplikasi                    | Metode pendaftaran mahasiswa ke perguruan tinggi (berbagai kode sesuai jenis pendaftaran)                            | Kategorikal |
+| Urutan Aplikasi                  | Urutan pilihan program studi oleh mahasiswa (0 - pilihan utama sampai 9 - pilihan terakhir)                          | Numerik     |
+| Program Studi                    | Program studi yang diambil oleh mahasiswa (mis. 171 - Desain Animasi dan Multimedia, 9991 - Manajemen malam)          | Kategorikal |
+| Waktu Kehadiran                  | Waktu kehadiran kuliah (1 – pagi, 0 – malam)                                                                          | Kategorikal |
+| Kualifikasi Sebelumnya          | Jenis kualifikasi pendidikan sebelum masuk perguruan tinggi                                                           | Kategorikal |
+| Nilai Kualifikasi Sebelumnya    | Nilai kualifikasi sebelumnya (0–200)                                                                                  | Numerik     |
+| Kewarganegaraan                  | Kewarganegaraan mahasiswa (mis. 1 - Portugal, 41 - Brasil)                                                             | Kategorikal |
+| Kualifikasi Ibu                  | Tingkat pendidikan terakhir ibu mahasiswa                                                                             | Kategorikal |
+| Kualifikasi Ayah                 | Tingkat pendidikan terakhir ayah mahasiswa                                                                            | Kategorikal |
+| Pekerjaan Ibu                    | Jenis pekerjaan ibu mahasiswa                                                                                         | Kategorikal |
+| Pekerjaan Ayah                   | Jenis pekerjaan ayah mahasiswa                                                                                        | Kategorikal |
+| Nilai Masuk                      | Nilai penerimaan mahasiswa ke program studi (0–200)                                                                   | Numerik     |
+| Mahasiswa Displaced              | Apakah mahasiswa berasal dari luar wilayah domisili (1 – ya, 0 – tidak)                                               | Kategorikal |
+| Kebutuhan Khusus                | Apakah mahasiswa memiliki kebutuhan pendidikan khusus (1 – ya, 0 – tidak)                                             | Kategorikal |
+| Penunggak                        | Apakah mahasiswa memiliki tunggakan pembayaran (1 – ya, 0 – tidak)                                                    | Kategorikal |
+| Biaya Kuliah Lancar              | Status pembayaran biaya kuliah terkini (1 – ya, 0 – tidak)                                                            | Kategorikal |
+| Jenis Kelamin                    | Jenis kelamin mahasiswa (1 – laki-laki, 0 – perempuan)                                                                | Kategorikal |
+| Penerima Beasiswa                | Apakah mahasiswa penerima beasiswa (1 – ya, 0 – tidak)                                                                | Kategorikal |
+| Usia Saat Masuk                  | Usia mahasiswa saat pertama kali mendaftar                                                                            | Numerik     |
+| Mahasiswa Internasional          | Status internasional mahasiswa (1 – ya, 0 – tidak)                                                                    | Kategorikal |
+| SKS 1 Semester (diakui)          | Jumlah SKS semester 1 yang diakui                                                                                     | Numerik     |
+| SKS 1 Semester (diambil)         | Jumlah SKS semester 1 yang diambil                                                                                    | Numerik     |
+| SKS 1 Semester (dinilai)         | Jumlah SKS semester 1 yang dinilai                                                                                    | Numerik     |
+| SKS 1 Semester (lulus)           | Jumlah SKS semester 1 yang disetujui/lulus                                                                            | Numerik     |
+
 
 * Distribusi attrition
 Terdapat 879 data berlabel "No" (bertahan di perusahaan) dan 179 berlabel "Yes" (keluar dari perusahaan)
