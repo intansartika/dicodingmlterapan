@@ -30,7 +30,7 @@ Proyek ini bertujuan mengidentifikasi faktor-faktor yang mempengaruhi tingginya 
        Google Colab Notebook (untuk analisis dan eksplorasi data)
 
        Looker Studio (untuk pembuatan dashboard interaktif)
-    3. Library Utama Python:
+    2. Library Utama Python:
        numpy: 2.0.2
      
        pandas: 2.2.2
@@ -44,6 +44,15 @@ Proyek ini bertujuan mengidentifikasi faktor-faktor yang mempengaruhi tingginya 
        sklearn version: 1.6.1
      
        statsmodels: 0.14.4
+
+       ### Membuat direktori proyek dan berpindah ke dalamnya
+```
+mkdir proyek_analisis_data
+cd proyek_analisis_data
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
 
 ## 2. Data Understanding
 Kita akan melakukan eksplorasi awal data:
